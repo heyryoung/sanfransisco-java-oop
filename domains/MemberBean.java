@@ -4,107 +4,62 @@ public class MemberBean {
 
 	private String userName ,userId, userPW, userBD, userBt;
 	private double height =0.0 , weight =0.0;
-	
-	
-
 
 	public String getUserName() {
 		return userName;
 	}
 
-
-
-
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
-
-
-
 
 	public String getUserId() {
 		return userId;
 	}
 
-
-
-
 	public void setUserId(String userId) {
 		this.userId = userId;
 	}
-
-
-
 
 	public String getUserPW() {
 		return userPW;
 	}
 
-
-
-
 	public void setUserPW(String userPW) {
 		this.userPW = userPW;
 	}
-
-
-
 
 	public String getUserBD() {
 		return userBD;
 	}
 
-
-
-
 	public void setUserBD(String userBD) {
 		this.userBD = userBD;
 	}
-
-
-
 
 	public String getUserBt() {
 		return userBt;
 	}
 
-
-
-
 	public void setUserBt(String userBt) {
 		this.userBt = userBt;
 	}
-
-
-
 
 	public double getHeight() {
 		return height;
 	}
 
-
-
-
 	public void setHeight(double height) {
 		this.height = height;
 	}
-
-
-
 
 	public double getWeight() {
 		return weight;
 	}
 
-
-
-
 	public void setWeight(double weight) {
 		this.weight = weight;
 	}
-
-
-
 
 	@Override
 	public String toString() {
@@ -119,8 +74,4 @@ public class MemberBean {
 				+ "키 : %.2f \n"
 				+ "몸무게 : %.2f \n", userName ,userId, userPW, userBD, userBt,height , weight );
 	}
-
-	
-	
-	
 }

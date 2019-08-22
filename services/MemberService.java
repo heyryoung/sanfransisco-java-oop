@@ -29,7 +29,9 @@ public class MemberService {
 		return msg;
 	}
 	
-	
+	/*
+	2. 마이페이지
+	*/
 	public String getMypage(int count) {
 		String msg=String.format("회원정보 \n"
 				+ "=====================\n"
@@ -45,8 +47,8 @@ public class MemberService {
 		return msg;
 	}
 	/*
-	1. 비번 변경
-	*/
+	3. 비번 변경
+		*/
 	public String update(MemberBean member) {
 		String msg="";
 		
@@ -64,6 +66,9 @@ public class MemberService {
 		return msg;
 	}
 	
+	/*
+	5. 회원 리스트 
+	*/
 	public String list() {
 		String msg="";
 		for (int i = 0; i < members.length; i++) {
@@ -73,6 +78,9 @@ public class MemberService {
 		return msg;
 	}
 	
+	/*
+	6. 아이디 찾기 
+	*/
 	public MemberBean findById(String id) {
 		MemberBean member = new MemberBean();
 		
@@ -111,42 +119,5 @@ public class MemberService {
 		return result;
 
 	}
-
-	/*
-	 * public String getReportCard(MemberBean mb) { String result = "";
-	 * 
-	 * int total =0, avg = 0 ; String eval= "";
-	 * 
-	 * int kor = mb.getKor(); int eng = mb.getEng(); int mat = mb.getMat();
-	 * 
-	 * total = (kor+eng+mat); avg = (kor+eng+mat) / 3;
-	 * 
-	 * if(avg < 70) { eval = "불합격"; }else if(70<=avg && avg <90 ) { eval = "합격";
-	 * }else if (90<=avg ) { eval = "장학생"; }
-	 * 
-	 * result
-	 * =" 학생           국어        영어        수학        총점        평균        합격여부\n";
-	 * result += " =======================================================\n";
-	 * result += String.
-	 * format(" %s           %d         %d          %d          %d          %d         %s  \n"
-	 * , mb.getUserName() , kor, eng, mat, total , avg, eval);
-	 * 
-	 * return result;
-	 * 
-	 * }
-	 */
-
-	/*
-	 * public String getTax(MemberBean mb) {
-	 * 
-	 * double rate = mb.getRate(); double tax = mb.getSal() * (rate*0.01);
-	 * 
-	 * String result = String.format("연봉 %.0f만원을 받으시는 %s님께서 납부할 세금은 %.0f만원입니다.",
-	 * mb.getSal(), mb.getUserName(), tax);
-	 * 
-	 * return result;
-	 * 
-	 * }
-	 */
 
 }
