@@ -4,6 +4,14 @@ import com.bitcamp.domains.SubjectBean;
 
 public class SubjectService {
 	
+	private SubjectBean[] subjects;
+	private int count;
+	
+	public SubjectService() {
+		subjects = new SubjectBean[2];
+		count =0;
+	}
+	
 	public String getTotal(SubjectBean grade) {
 		String result = "";
 		

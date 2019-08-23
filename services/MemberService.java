@@ -4,20 +4,33 @@ package com.bitcamp.services;
 import com.bitcamp.domains.MemberBean;
 /*
 1. 회원가입
-2. 정보보기
-3. 회원수정
+2. 마이페이지
+3. 비번수정
 4. 회원탈퇴
+5.아이디 존재체크
+6.로그인
+
+<관리자기능>
+1.회원목록
+2. 아이디검색
+3. 이름검색
+4. 천체 회원수
 */
 
 public class MemberService {
 
-	private MemberBean[] members = null;
+	private MemberBean[] members;
 	private int count;
 	
 	public MemberService() {
-		 members = new MemberBean[2];
+		 members = new MemberBean[10];
 		 count =0;
 	}
+	
+	
+	/*****************************************************************
+		사용자기능
+	 ******************************************************************/
 	
 	/*
 	1. 회원가입
@@ -32,7 +45,8 @@ public class MemberService {
 	/*
 	2. 마이페이지
 	*/
-	public String getMypage(int count) {
+	public String getMypage(String number) {
+		int num = Integer.parseInt(number);
 		String msg=String.format("회원정보 \n"
 				+ "=====================\n"
 				+ "이름 : %s \n"
@@ -41,37 +55,121 @@ public class MemberService {
 				+ "주민번호 : %s \n"
 				+ "혈액형 : %s \n"
 				+ "키 : %.2f \n"
-				+ "몸무게 : %.2f \n", members[count].getUserName(), members[count].getUserId() ,members[count].getUserPW() , members[count].getUserBD() , members[count].getUserBt(), members[count].getHeight() , members[count].getWeight() );
-		
+				+ "몸무게 : %.2f \n", members[num].getUserName(), members[num].getUserId() ,
+				members[num].getUserPW() , members[num].getUserBD() , 
+				members[num].getUserBt(), members[num].getHeight() , members[num].getWeight() );
 		
 		return msg;
 	}
 	/*
-	3. 비번 변경
+	3. 비번 변경 옛날 비번, 신규 비번을 입력받아서 , 옛날 비번을 체크 후 일치하면 신규 비번으로 변경
+		비번 변경 후 로그인을 진행해서 새로 바뀐 비번이 로그인 성공, 옛날 비번은 로그인 실패. 
 		*/
-	public String update(MemberBean member) {
-		String msg="";
+	public String  update(MemberBean[] memberBeans) {
+		String result = "비밀번호 변경에 실패하였습니다. " ;
 		
+		String userId = memberBeans[0].getUserId();
+		String oldPW = memberBeans[0].getUserPW();
+		String newPW = memberBeans[1].getUserPW();
 		
-		return msg;
+		for (int i = 0; i < count; i++) {
+			if(userId.equals(members[i].getUserId()) && oldPW.equals(members[i].getUserPW()) ) {
+				System.out.println(newPW);
+				
+				members[i].setUserPW(newPW); 
+				System.out.println(members[i].getUserPW());
+				
+				result = "비밀번호 변경에 성공하였습니다. " ;
+				break;
+			}
+		}
+		
+		return result;
 	}
 		
 	/*
 	4. 회원 탈퇴 
 	*/
 	public String withdrawal(MemberBean member) {
-		String msg="회원탈퇴완료";
+		String result="회원탈퇴실패";
+		String userId = member.getUserId();
+		String userPw = member.getUserPW();
 		
 		
-		return msg;
+		for (int i = 0; i < count; i++) {
+			if(userId.equals(members[i].getUserId())){
+				if(userPw.equals(members[i].getUserPW())) {
+					//회원 탈퇴 프로세스 진행 	
+					members[i] = null;
+					for (int j = i; j < count; j++) {
+						members[j] = members[j+1];
+					}
+					members[members.length-1] = null;
+					count-- ;
+					
+					result = "회원탈퇴 성공";
+					break;
+				}
+				result = "비밀번호가 틀립니다.";
+				break;
+			}
+			result = "없는 아이디 입니다.";
+		}
+		return result;
+		
 	}
 	
+	/*
+		5. 아이디 체크
+	*/
+	
+	public String existId(String id) {
+		String result="사용 가능한 아이디 입니다.";
+		
+		for (int i = 0; i < count; i++) {
+			if(id.equals(members[i].getUserId())) {
+				result = "이미 존재하는 아이디 입니다.";
+				
+				break;
+			}
+		}
+		return result;
+	}
+	
+	/*	
+			6. 로그인 (파라미터로 ID, PW만 입력받은 상태)
+	*/	
+	
+	public String login(MemberBean param) {
+		String result="로그인실패";
+		String userId = param.getUserId();
+		String userPw = param.getUserPW();
+		
+		
+		for (int i = 0; i < count; i++) {
+			if(userId.equals(members[i].getUserId())){
+				if(userPw.equals(members[i].getUserPW())) {
+					result = "로그인성공";
+					
+					break;
+				}
+				result = "비밀번호가 틀립니다.";
+				break;
+			}
+			result = "없는 아이디 입니다.";
+		}
+		return result;
+	}
+	
+	/*****************************************************************
+			관리자기능
+	******************************************************************/
 	/*
 	5. 회원 리스트 
 	*/
 	public String list() {
 		String msg="";
-		for (int i = 0; i < members.length; i++) {
+		for (int i = 0; i < count; i++) {
 			msg += members[i].toString()+"\n\n\n ";
 		}
 		
@@ -84,7 +182,7 @@ public class MemberService {
 	public MemberBean findById(String id) {
 		MemberBean member = new MemberBean();
 		
-		for (int i = 0; i < members.length; i++) {
+		for (int i = 0; i < count; i++) {
 			if(id.equals(members[i].getUserId())) {
 				member = members[i];
 			}
@@ -92,32 +190,36 @@ public class MemberService {
 		
 		return member;
 	}
-
-	public String getBMI(MemberBean member) {
-
-		double yM= 0.0, BMI = 0.0;
-		String eval= "";
+	
+	
+	public MemberBean[] findByName(String name) {
 		
-		yM = member.getHeight()*0.01;
-		BMI = member.getWeight() /(yM*yM);
-
+		int cnt=0;
 		
-		if(BMI<=18.5) {
-			eval = "저체중";
-		}else if(18.5<BMI&&BMI<=23.0) { 
-			eval = "정상";
-		}else if(23.0<BMI && BMI<=25.0) {
-			eval = "과체중";
-		}else if(25.0<BMI && BMI<=30.0) {
-			eval = "비만";
-		}else if(30.0<BMI) {
-			eval = "고도비만";
+		for (int i = 0; i < count ; i++) {
+			if(name.equals(members[i].getUserName())) {
+				cnt++;
+			}
 		}
-
-		String result = String.format("BMI는 %.2f로 %S입니다 ", BMI , eval);
-
-		return result;
-
+		
+		MemberBean[] memberArr = new MemberBean[cnt];
+		cnt =0;
+		for (int i = 0; i < count; i++) {
+			if(name.equals(members[i].getUserName())) {
+				memberArr[cnt] = members[i];
+				if(memberArr.length == cnt) {
+					break;
+				}
+				cnt++;
+			}
+		}
+		return memberArr;
 	}
+	
+	
+	public String countAll() {
+		return "총회원수 : "+count;
+	}
+	
 
 }
